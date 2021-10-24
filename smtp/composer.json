@@ -1,0 +1,6 @@
+{
+    "require": {
+        "firebase/php-jwt": "^5.4",
+        "mailjet/mailjet-apiv3-php": "^1.5"
+    }
+}
