@@ -1,43 +1,35 @@
 <?php
-
-class Merchant
+require_once "../../../vendor/autoload.php";
+use \Mailjet\Resources;
+class Sec_user
 {
     private $id;
     private $name;
     private $email;
     private $password;
-    private $credit;
     private $token;
-
-    //setting an employee's properties
-    public function set_employee($id, $name, $email, $password, $credit, $token)
+    public function set_sec_user($email)
     {
-        $this->id = $id;
-        $this->name = $name;
         $this->email = $email;
-        $this->password = $password;
-        $this->credit = $credit;
-        $this->token = $token;
     }
-    //get employee properties as associative array
-    public function get_employee()
+    //get merchant properties as associative array
+    public function get_sec_user()
     {
         $employee = array(
             "id" => $this->id,
             "name" => $this->name,
             "email" => $this->email,
-            "designation" => $this->designation,
-            "salary" => $this->salary,
-            "contact_num" => $this->contact_num
+            "password" => $this->password,
+            "token" => $this->token
         );
         return $employee;
     }
-    //adding employee record in database
-    public function add_employee($name, $email, $designation, $salary, $contact, $db_conn)
+    //sign up merchant record in database
+    public function sign_up($name, $email, $password, $confirm_password, $db_conn)
     {
         $sql = "INSERT INTO
-        employee (name, email , designation, contact_num, salary)
-        VALUES ('$name', '$email', '$designation','$salary','$contact')";
+        secondary_user (name, email , password)
+        VALUES ('$name', '$email', '$password')";
 
         if ($db_conn->query($sql) === TRUE)
         {
@@ -50,92 +42,195 @@ class Merchant
         $db_conn->close();
     }
 
-    //deleting employee from database
-    public function delete_employee($id, $db_conn)
-    {
-      //create query
-        $query = $db_conn -> prepare("DELETE FROM employee WHERE id = '$id'");
-        
-       //sanitize
-        $id = htmlspecialchars(strip_tags($id));
-        
-        //bind id of employee to delete
-        $query -> bind_param("i", $id);
-
-        //execute query
-        if($query->execute())
+        //sign in merchant record in database
+        public function sign_in($email, $password, $db_conn)
         {
-            return true;
+            $this->email=$email;
+            $query = "SELECT name,email FROM secondary_user WHERE email='$email' AND password='$password'";
+            $result = $db_conn->query($query);
+            if($result)
+            {
+                return $result;
+            }else{
+                return false;
+            }
+             $db_conn->close();
         }
+
+            //send mail from secondary
+    public function send_mail($from,$fname,$to,$tname,$cc,$cname,$bcc,$bname,$subject,$tpart,$hpart,$d)
+    {
+        $query = "SELECT * FROM secondary_user WHERE email='$this->email'";
+        $result = $d->query($query);
+        var_dump($result);
+        $result=$result->fetch_assoc();
+        $result=$result['send_mail'];
+        if($result)
+        {
+            var_dump(true);
+            $mj = new Mailjet\Client('dfbdeda82e4b22fdd89633908aca5c64','118a2111be257757e2406bc21fa33238',true,['version' => 'v3.1']);
+            $body = [
+              'Messages' => [
+                [
+                  'From' => [
+                    'Email' => $from,
+                    'Name' => $fname
+                  ],
+                  'To' => [
+                    [
+                      'Email' => $to,
+                      'Name' => $tname
+                    ]
+                  ],
+                  'Cc' => [
+                    [
+                      'Email' => $cc,
+                      'Name' => $cname
+                    ]
+                  ],
+                  'Bcc' => [
+                    [
+                      'Email' => $bcc,
+                      'Name' => $bname
+                    ]
+                  ],
+                  'Subject' => $subject,
+                  'TextPart' => $tpart,
+                  'HTMLPart' => $hpart,
+                  'CustomID' => "AppGettingStartedTest"
+                ]
+              ]
+            ];
+            // var_dump($this->email);
+            $response = $mj->post(Resources::$Email, ['body' => $body]);
+            // $response->success() && var_dump($response->getData());
+                // var_dump($response->success());  
+                // var_dump($response->getData());
+            // if($response->success())
+            if(true)
+            {
+                $query = "SELECT * FROM secondary_user WHERE email='$this->email'";
+                $result = $d->query($query);
+                var_dump($result);
+                $result=$result->fetch_assoc();
+                $merchant_id=$result['merchant_id'];
+    
+                $query = "SELECT * FROM merchant WHERE id='$merchant_id'";
+                $result = $d->query($query);
+                $result=$result->fetch_assoc();
+                $credit=$result['credit']-0.0489;
+    
+                $query = "UPDATE merchant SET credit='$credit' WHERE id='$merchant_id' ";
+                $result = $d->query($query);
+                var_dump($result);
+    
+                $query = "INSERT INTO payments (Balance, merchant_id) VALUES ('$credit', '$merchant_id')";
+                $result = $d->query($query);
+                var_dump($result);
+                $hpart=strip_tags("$hpart");
+                $query = "INSERT INTO request (from_email,to_email,Cc,Bcc,subject,body,merchant_id) VALUES ('$from','$to','$cc','$bcc','$subject','$tpart.\n$hpart','$merchant_id')";
+                var_dump($query);
+                $result = $d->query($query);
+                var_dump($result);
+                return true;
+            }
+        }
+
+
 
         return false; 
+        $d->close();
     }
 
-    //updating employee's record
-    public function update_employee($id, $name, $email, $password, $credit, $token, $db_conn)
-    {
-            // query 
-       // $query_object=$db_conn->mysqli_qury()->execute();
-        $query = "UPDATE employee Set name, email,password, credit, token VALUE('".$name."','".$email."','".$password."','".$credit."','".$token."') where id='".$id."'";  
-        if($db_conn->query($query));
+        //get request's record
+        public function list_request($d)
         {
-            return true;
-        }
-        {
-            return false;
-        }
-    }
-
-    
-    //searching employee
-    public function search_employee($keywords, $db_conn)
-    {
-        // create query
-        $sql_query = $db_conn->query("SELECT * FROM employee where name Like '$keywords'");
-        if($sql_query->num_rows>0)
-        {
-            $data=array();
-            while($row=$sql_query->fetch_assoc())
+            $query = "SELECT * FROM secondary_user WHERE email='$this->email'";
+            $result = $d->query($query);
+            var_dump($result);
+            $result=$result->fetch_assoc();
+            $result=$result['check_listing'];
+            if($result)
             {
-                $data['id']=$row['id'];
-                $data['name']=$row['name'];
-                $data['email']=$row['email'];
-                $data['designation']=$row['designation'];
-                $data['contact_num']=$row['contact_num'];
-                $data['salary']=$row['salary'];
+                $query = "SELECT * FROM secondary_user WHERE email='$this->email'";
+                $result = $d->query($query);
+                var_dump($result);
+                $result=$result->fetch_assoc();
+                $merchant_id=$result['merchant_id'];
+                $query = "SELECT * FROM merchant WHERE id='$merchant_id'";
+                $result = $d->query($query);
+                $result=$result->fetch_assoc();
+                $merchant_id=$result['id'];
+                $query = "Select * from request where merchant_id='$merchant_id' ";
+                $result=$d->query($query);
+                if($result->num_rows>0)
+                {
+                    $data=array();
+                    $i=0;
+                    while ($row = $result->fetch_assoc()) {
+                        $data[$i]['from_email']=$row["from_email"];
+                        $data[$i]['to_email']=$row["to_email"];
+                        $data[$i]['Cc']=$row["Cc"];
+                        $data[$i]['Bcc']=$row["Bcc"];
+                        $data[$i]['subject']=$row["subject"];
+                        $data[$i]['body']=$row["body"];
+                        $i++;
+                    }
+        
+        
+                    return $data;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            return $data;
-
-        }
-        else
-        {
             return false;
+            $d->close();
         }
-        $db_conn->close();
-    }
 
-    //displaying record of all employees
-    public function list_employee($db_conn)
+            //get payments
+    public function check_payment($d)
     {
-       //create query
-       $qury = $db_conn->query("select * from employee");
-        if ($qury->num_rows > 0) {
-            $data=array();
-            while($row=$qury->fetch_assoc()) 
-            {
-                $data['id']=$row['id'];
-                $data['name']=$row['name'];
-                $data['email']=$row['email'];
-                $data['designation']=$row['designation'];
-                $data['contact_num']=$row['contact_num'];
-                $data['salary']=$row['salary']; 
-            }
-            return $data;
-        }else
+        $query = "SELECT * FROM secondary_user WHERE email='$this->email'";
+        $result = $d->query($query);
+        var_dump($result);
+        $result=$result->fetch_assoc();
+        $result=$result['billing_info'];
+        if($result)
         {
-            return false;
+            $query = "SELECT * FROM secondary_user WHERE email='$this->email'";
+            $result = $d->query($query);
+            var_dump($result);
+            $result=$result->fetch_assoc();
+            $merchant_id=$result['merchant_id'];
+            $query = "SELECT * FROM merchant WHERE id='$merchant_id'";
+            $result = $d->query($query);
+            $result=$result->fetch_assoc();
+            $merchant_id=$result['id'];
+            $query = "Select * from payments where merchant_id='$merchant_id' ";
+            $result=$d->query($query);
+            if($result->num_rows>0)
+            {
+                $data=array();
+                $i=0;
+                while ($row = $result->fetch_assoc()) {
+                    $data[$i]['Balance']=$row["Balance"];
+                    $data[$i]['payment_time']=$row["payment_time"];
+                    $i++;
+                }
+
+
+                return $data;
+            }
+            else
+            {
+                return false;
+            }
         }
-         $db_conn->close();
+        return false;
+        $d->close();
     }
+
 }
 ?>

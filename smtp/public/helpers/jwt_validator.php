@@ -16,7 +16,7 @@ class JWT_V{
         $this->key=$key;
     }
 
-    public function jwt_validate( $jwt)
+    public function jwt_validate($jwt)
     {
             if(isset($jwt)){
         

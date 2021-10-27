@@ -24,24 +24,24 @@ class InstalledVersions
 private static $installed = array (
   'root' => 
   array (
-    'pretty_version' => '1.0.0+no-version-set',
-    'version' => '1.0.0.0',
+    'pretty_version' => 'dev-main',
+    'version' => 'dev-main',
     'aliases' => 
     array (
     ),
-    'reference' => NULL,
+    'reference' => 'fdf1c05aa3d077a722040eb7d2ea52b611995876',
     'name' => '__root__',
   ),
   'versions' => 
   array (
     '__root__' => 
     array (
-      'pretty_version' => '1.0.0+no-version-set',
-      'version' => '1.0.0.0',
+      'pretty_version' => 'dev-main',
+      'version' => 'dev-main',
       'aliases' => 
       array (
       ),
-      'reference' => NULL,
+      'reference' => 'fdf1c05aa3d077a722040eb7d2ea52b611995876',
     ),
     'cordoval/hamcrest-php' => 
     array (
@@ -183,6 +183,15 @@ private static $installed = array (
       array (
       ),
       'reference' => '120b605dfeb996808c31b6477290a714d356e822',
+    ),
+    'stripe/stripe-php' => 
+    array (
+      'pretty_version' => 'v7.100.0',
+      'version' => '7.100.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '3dfc3dcd5d967a14d2852f34e544188af5f9b799',
     ),
     'symfony/deprecation-contracts' => 
     array (

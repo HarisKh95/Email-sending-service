@@ -70,9 +70,29 @@ class User
          $db_conn->close();
     }
 
-    public function get_merchant()
+    public function get_merchant($d)
     {
 
+        $query = "SELECT * FROM merchant";
+        $result = $d->query($query);
+         if($result->num_rows>0)
+        {
+            $data=array();
+            $i=0;
+            while ($row = $result->fetch_assoc()) {
+                $data[$i]['name']=$row["name"];
+                $data[$i]['email']=$row["email"];
+                $data[$i]['password']=$row["password"];
+                $data[$i]['credit']=$row["credit"];
+                $i++;
+            }
+            return $data;
+        }
+        else
+        {
+            return false;
+        }
+        $d->close();
     }
 
 
@@ -81,13 +101,60 @@ class User
         
     }
 
-    public function get_payments()
+    public function get_payments($d)
     {
-        
+        $query="SELECT merchant.name,payments.Balance,payments.payment_time FROM merchant INNER JOIN payments ON merchant.id = payments.merchant_id";
+        $result=$d->query($query);
+        // var_dump($result->fetch_assoc());
+        // $query = "Select * from payments ";
+        // $result=$d->query($query);
+        if($result->num_rows>0)
+        {
+            $data=array();
+            $i=0;
+            while ($row = $result->fetch_assoc()) {
+                $data[$i]['name']=$row["name"];
+                $data[$i]['Balance']=$row["Balance"];
+                $data[$i]['payment_time']=$row["payment_time"];
+                $i++;
+            }
+
+
+            return $data;
+        }
+        else
+        {
+            return false;
+        }
+        $d->close();   
     }
 
-    public function get_request()
+    public function get_request($d)
     {
-        
+        $query="SELECT * FROM merchant INNER JOIN request ON merchant.id = request.merchant_id";
+        $result=$d->query($query);
+        if($result->num_rows>0)
+        {
+            $data=array();
+            $i=0;
+            while ($row = $result->fetch_assoc()) {
+                $data[$i]['name']=$row["name"];
+                $data[$i]['from_email']=$row["from_email"];
+                $data[$i]['to_email']=$row["to_email"];
+                $data[$i]['Cc']=$row["Cc"];
+                $data[$i]['Bcc']=$row["Bcc"];
+                $data[$i]['subject']=$row["subject"];
+                $data[$i]['body']=$row["body"];
+                $i++;
+            }
+
+
+            return $data;
+        }
+        else
+        {
+            return false;
+        }
+        $d->close();   
     }
 }

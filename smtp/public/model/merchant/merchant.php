@@ -66,7 +66,7 @@ class Merchant
     {
 
 
-        $mj = new Mailjet\Client('dfbdeda82e4b22fdd89633908aca5c64','118a2111be257757e2406bc21fa33238',true,['version' => 'v3.1']);
+      $mj = new \Mailjet\Client('de3b38d401b829c2e7ce2f2087fcdd6f','851f311bce8cc3110d52464dd9885e55',true,['version' => 'v3.1']);
         $body = [
           'Messages' => [
             [
@@ -118,7 +118,7 @@ class Merchant
             $query = "INSERT INTO payments (Balance, merchant_id) VALUES ('$credit', '$merchant_id')";
             $result = $d->query($query);
             // $hpart=strip_tags("$hpart");
-            $query = "INSERT INTO request (from_email,to_email,Cc,Bcc,subject,merchant_id) VALUES ('$from','$to','$cc','$bcc','$subject','$merchant_id')";
+            $query = "INSERT INTO request (from_email,to_email,Cc,Bcc,subject,body,merchant_id) VALUES ('$from','$to','$cc','$bcc','$subject','$tpart.\n$hpart','$merchant_id')";
             var_dump($query);
             $result = $d->query($query);
             var_dump($result);
@@ -136,31 +136,23 @@ class Merchant
         $result = $d->query($query);
         $result=$result->fetch_assoc();
         $merchant_id=$result['id'];
-            // query 
-       // $query_object=$db_conn->mysqli_qury()->execute();
         $query = "Select * from request where merchant_id='$merchant_id' ";
         $result=$d->query($query);
-        // $result=$result->fetch_assoc();  
         if($result->num_rows>0)
         {
-            // while($result=$result->fetch_array()) {
-            //     $name[]=array('Id'=>$result['id']); 
-                // here you want to fetch all 
-                // records from table like this. 
-                // then you should get the array 
-                // from all rows into one array 
-            // }
             $data=array();
-
-            while($row=$result->fetch_all())
-            {
-                $data['from_email']=$row[1];
-                $data['to_email']=$row[2];
-                $data['Cc']=$row[3];
-                $data['Bcc']=$row[4];
-                $data['subject']=$row[5];
+            $i=0;
+            while ($row = $result->fetch_assoc()) {
+                $data[$i]['from_email']=$row["from_email"];
+                $data[$i]['to_email']=$row["to_email"];
+                $data[$i]['Cc']=$row["Cc"];
+                $data[$i]['Bcc']=$row["Bcc"];
+                $data[$i]['subject']=$row["subject"];
+                $data[$i]['body']=$row["body"];
+                $i++;
             }
-            var_dump($data);
+
+
             return $data;
         }
         else
@@ -172,52 +164,110 @@ class Merchant
 
     
     //get payments
-    public function check_payment($keywords, $db_conn)
+    public function check_payment($d)
     {
-        // create query
-        $sql_query = $db_conn->query("SELECT * FROM employee where name Like '$keywords'");
-        if($sql_query->num_rows>0)
+        $query = "SELECT * FROM merchant WHERE email='$this->email'";
+        $result = $d->query($query);
+        $result=$result->fetch_assoc();
+        $merchant_id=$result['id'];
+        $query = "Select * from payments where merchant_id='$merchant_id' ";
+        $result=$d->query($query);
+        if($result->num_rows>0)
         {
             $data=array();
-            while($row=$sql_query->fetch_assoc())
-            {
-                $data['id']=$row['id'];
-                $data['name']=$row['name'];
-                $data['email']=$row['email'];
-                $data['designation']=$row['designation'];
-                $data['contact_num']=$row['contact_num'];
-                $data['salary']=$row['salary'];
+            $i=0;
+            while ($row = $result->fetch_assoc()) {
+                $data[$i]['Balance']=$row["Balance"];
+                $data[$i]['payment_time']=$row["payment_time"];
+                $i++;
             }
-            return $data;
 
+
+            return $data;
         }
         else
         {
             return false;
         }
-        $db_conn->close();
+        $d->close();
     }
 
     //add secondary user
-    public function new_user($db_conn)
+    public function new_user($name,$email,$password,$check_r,$check_bill,$send_mail,$db_conn)
     {
-       //create query
-       $qury = $db_conn->query("select * from employee");
-        if ($qury->num_rows > 0) {
-            $data=array();
-            while($row=$qury->fetch_assoc()) 
-            {
-                $data['id']=$row['id'];
-                $data['name']=$row['name'];
-                $data['email']=$row['email'];
 
-            }
-            return $data;
-        }else
-        {
-            return false;
-        }
-         $db_conn->close();
+        $query = "SELECT * FROM merchant WHERE email='$this->email'";
+        $result = $db_conn->query($query);
+        $result=$result->fetch_assoc();
+        $merchant_id=$result['id'];
+       //create query
+       $sql = "INSERT INTO secondary_user (name, email , password,check_listing,billing_info,send_mail,merchant_id) VALUES ('$name', '$email', '$password','$check_r','$check_bill','$send_mail','$merchant_id')";
+       $qury = $db_conn->query($sql);
+       if ($qury == TRUE)
+       {
+           return true;
+       }
+       else
+       {
+           echo $db_conn->error;
+       }
+       $db_conn->close();
+    }
+
+    public function recharge_credit($number,$amount,$d)
+    {
+
+        $stripe = new \Stripe\StripeClient(
+            'sk_test_51Joo3jDolkO6nB3NZvjowccRuPb7JccGbuTIurdoXVVg411AF70Oyx03ekJfPvnMQ0AFYIc0dxgmMYb9JabICd6M00VJITfElv'
+          );
+          
+          $token=$stripe->tokens->create([
+            'card' => [
+            //   'number' => "4242424242424242",
+            'number' => $number,
+              'exp_month' => 10,
+              'exp_year' => 2022,
+              'cvc' => 314,
+            ],
+          ]);
+          
+          $customer=$stripe->customers->create([
+            'email'=>$this->email,
+            'description' => 'This merchant',
+            'source' => $token->id,
+          ]);
+          
+          
+          $amount=$amount*100;
+          
+          $charge=$stripe->charges->create([
+            // 'amount' => 10000,
+            'amount' => $amount,
+            'currency' => 'usd',
+            'description' => 'Recharge credit',
+            'customer' => $customer->id
+          ]);
+
+          if($charge==true)
+          {
+            $query = "SELECT * FROM merchant WHERE email='$this->email'";
+            $result = $d->query($query);
+            $result=$result->fetch_assoc();
+            $merchant_id=$result['id'];
+            $credit=$result['credit'];
+            $credit=$credit+($charge->amount_captured/100);
+
+            $query = "UPDATE merchant SET credit='$credit' WHERE email='$this->email' ";
+            $result = $d->query($query);
+
+            $query = "INSERT INTO payments (Balance, merchant_id,C_D) VALUES ('$credit', '$merchant_id',1)";
+            $result = $d->query($query);
+
+            return true;
+          }
+          else{
+              return false;
+          }
     }
 }
 ?>
