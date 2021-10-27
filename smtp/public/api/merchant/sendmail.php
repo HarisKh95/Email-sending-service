@@ -40,8 +40,27 @@ $j_v=$j->jwt_validate($jwt);
 if($j_v['result'])
 {
     $m=new Merchant();
-    $m->set_merchant($j_v['email']->email);
-    $m->send_mail($from,$fname,$to,$tname,$cc,$cname,$bcc,$bname,$subject,$tpart,$hpart,$d);
+    $m->set_merchant($j_v['data']->email);
+    if($j_v['data']->type=="Merchant")
+    {
+        $m=$m->send_mail($from,$fname,$to,$tname,$cc,$cname,$bcc,$bname,$subject,$tpart,$hpart,$d);
+        if($m)
+        {
+            $res->set_response(null,"Mail send",200);
+            $res->respond_api();            
+        }
+        else
+        {
+            $res->set_response(null,"Mail not send",502);
+            $res->respond_api();
+        }
+    }
+    else
+    {
+        $res->set_response(null,"Only merchant have access",401);
+        $res->respond_api();
+    }
+
 }
 
 

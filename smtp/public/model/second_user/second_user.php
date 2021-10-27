@@ -64,11 +64,16 @@ class Sec_user
         $result = $d->query($query);
         var_dump($result);
         $result=$result->fetch_assoc();
-        $result=$result['send_mail'];
-        if($result)
+        $send_mail=$result['send_mail'];
+        $merc_id=$result['merchant_id'];
+        $query = "SELECT * FROM merchant WHERE id='$merc_id'";
+        $merc = $d->query($query);
+        $merc=$merc->fetch_assoc();
+        $merc_credit=$merc['credit'];
+        if($send_mail&&($merc_credit>=10.00))
         {
             var_dump(true);
-            $mj = new Mailjet\Client('dfbdeda82e4b22fdd89633908aca5c64','118a2111be257757e2406bc21fa33238',true,['version' => 'v3.1']);
+            $mj = new \Mailjet\Client('de3b38d401b829c2e7ce2f2087fcdd6f','851f311bce8cc3110d52464dd9885e55',true,['version' => 'v3.1']);
             $body = [
               'Messages' => [
                 [
@@ -106,12 +111,11 @@ class Sec_user
             // $response->success() && var_dump($response->getData());
                 // var_dump($response->success());  
                 // var_dump($response->getData());
-            // if($response->success())
-            if(true)
+            if($response->success())
             {
                 $query = "SELECT * FROM secondary_user WHERE email='$this->email'";
                 $result = $d->query($query);
-                var_dump($result);
+
                 $result=$result->fetch_assoc();
                 $merchant_id=$result['merchant_id'];
     
@@ -122,21 +126,19 @@ class Sec_user
     
                 $query = "UPDATE merchant SET credit='$credit' WHERE id='$merchant_id' ";
                 $result = $d->query($query);
-                var_dump($result);
+
     
                 $query = "INSERT INTO payments (Balance, merchant_id) VALUES ('$credit', '$merchant_id')";
                 $result = $d->query($query);
-                var_dump($result);
+
                 $hpart=strip_tags("$hpart");
                 $query = "INSERT INTO request (from_email,to_email,Cc,Bcc,subject,body,merchant_id) VALUES ('$from','$to','$cc','$bcc','$subject','$tpart.\n$hpart','$merchant_id')";
-                var_dump($query);
+
                 $result = $d->query($query);
-                var_dump($result);
+
                 return true;
             }
         }
-
-
 
         return false; 
         $d->close();
@@ -147,14 +149,12 @@ class Sec_user
         {
             $query = "SELECT * FROM secondary_user WHERE email='$this->email'";
             $result = $d->query($query);
-            var_dump($result);
             $result=$result->fetch_assoc();
             $result=$result['check_listing'];
             if($result)
             {
                 $query = "SELECT * FROM secondary_user WHERE email='$this->email'";
                 $result = $d->query($query);
-                var_dump($result);
                 $result=$result->fetch_assoc();
                 $merchant_id=$result['merchant_id'];
                 $query = "SELECT * FROM merchant WHERE id='$merchant_id'";
@@ -194,14 +194,12 @@ class Sec_user
     {
         $query = "SELECT * FROM secondary_user WHERE email='$this->email'";
         $result = $d->query($query);
-        var_dump($result);
         $result=$result->fetch_assoc();
         $result=$result['billing_info'];
         if($result)
         {
             $query = "SELECT * FROM secondary_user WHERE email='$this->email'";
             $result = $d->query($query);
-            var_dump($result);
             $result=$result->fetch_assoc();
             $merchant_id=$result['merchant_id'];
             $query = "SELECT * FROM merchant WHERE id='$merchant_id'";
@@ -219,8 +217,6 @@ class Sec_user
                     $data[$i]['payment_time']=$row["payment_time"];
                     $i++;
                 }
-
-
                 return $data;
             }
             else

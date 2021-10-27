@@ -30,12 +30,34 @@ $j_v=$j->jwt_validate($jwt);
 if($j_v['result'])
 {
     $m=new Merchant();
-    $m->set_merchant($j_v['email']->email);
-    $requests=$m->check_payment($d);
-    if(isset($requests))
+    $m->set_merchant($j_v['data']->email);
+    if($j_v['data']->type=="Merchant")
     {
-        echo json_encode($requests);
+        $requests=$m->check_payment($d);
+        if(isset($requests))
+        {
+            if($requests==false)
+            {
+                $res->set_response(NULL,"No payments",406);
+                $res->respond_api();
+            }
+            else
+            {
+                echo json_encode($requests);
+                echo "\r\n";
+                $res->set_response(NULL,"Payments list recieved",200);
+                $res->respond_api();
+            }
+    
+        }
+    
     }
+    else
+    {
+        $res->set_response(null,"Only merchant have access",401);
+        $res->respond_api();
+    }
+
 }
 
 

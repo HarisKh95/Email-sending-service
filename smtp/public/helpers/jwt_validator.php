@@ -33,7 +33,7 @@ class JWT_V{
                         "message" => "Access granted.",
                         "data" => $decoded->data
                     ));
-                    return array("result"=>true,"email"=>$decoded->data);
+                    return array("result"=>true,"data"=>$decoded->data);
             
                 }
                 catch (Exception $e){
@@ -47,7 +47,7 @@ class JWT_V{
                         "error" => $e->getMessage()
                     ));
 
-                    return array("result"=>false,"email"=>NULL);
+                    return array("result"=>false,"data"=>NULL);
                 }
             
                 // catch will be here
@@ -59,7 +59,7 @@ class JWT_V{
              
                 // tell the user access denied
                 echo json_encode(array("message" => "Access denied."));
-                return array("result"=>false,"email"=>NULL);
+                return array("result"=>false,"data"=>NULL);
             }
         }
     }

@@ -32,13 +32,35 @@ var_dump($data);
 // }
 
 $j_v=$j->jwt_validate($jwt);
+$m=new Merchant();
+$m->set_merchant($j_v['data']->email);
 
 if($j_v['result'])
 {
-    $m=new Merchant();
-    $m->set_merchant($j_v['email']->email);
-    $m->new_user($name,$email,$password,$check_r,$check_b,$send_m,$d);
+
+    $requests=$m->new_user($name,$email,$password,$check_r,$check_b,$send_m,$d);
+    if($requests==false)
+    {
+        $res->set_response(NULL,"No User created",406);
+        $res->respond_api();
+    }
+    else
+    {
+        echo json_encode($requests);
+        echo "\r\n";
+        $res->set_response(NULL,"New User Created",200);
+        $res->respond_api();
+    }
+
+
 }
+else
+{
+    $res->set_response(null,"Only merchant have access",401);
+    $res->respond_api();
+}
+
+
 
 
 

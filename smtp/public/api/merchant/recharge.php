@@ -31,12 +31,30 @@ $j_v=$j->jwt_validate($jwt);
 if($j_v['result'])
 {
     $m=new Merchant();
-    $m->set_merchant($j_v['email']->email);
-    $result=$m->recharge_credit($number,$amount,$d);
-    if($result)
+    $m->set_merchant($j_v['data']->email);
+    if($j_v['data']->type=="Merchant")
     {
-        echo "Recharge successfull";
+        $result=$m->recharge_credit($number,$amount,$d);
+        if($result)
+        {
+            echo "\r\n";
+            $res->set_response(NULL,"Credit Recieved",200);
+            $res->respond_api();
+        }
+        else
+        {
+            echo "\r\n";
+            $res->set_response(NULL,"No Credit recieved",406);
+            $res->respond_api();
+        }
+    
     }
+    else
+    {
+        $res->set_response(null,"Only merchant have access",401);
+        $res->respond_api();
+    }
+
 }
 
 

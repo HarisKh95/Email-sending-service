@@ -30,7 +30,29 @@ $j_v=$j->jwt_validate($jwt);
 if($j_v['result'])
 {
     $u=new User();
-    echo json_encode($u->get_merchant($d));
+    if($j_v['data']->type=="admin")
+    {
+        $requests=$u->get_merchant($d);
+        if($requests==false)
+        {
+            echo "\r\n";
+            $res->set_response(NULL,"No Merchants list",406);
+            $res->respond_api();
+        }
+        else
+        {
+            echo json_encode($requests);
+            echo "\r\n";
+            $res->set_response(NULL,"Merchants list recieved",200);
+            $res->respond_api();
+        }
+    
+    }
+    else
+    {
+        $res->set_response(null,"Only admin have access",401);
+        $res->respond_api();
+    }
 }
 
 

@@ -46,12 +46,9 @@ else{
                     "exp" => $expiration_time,
                     "iss" => $issuer,
                     "data" => array(
-                        // "id" => $user->id,
-                        // "firstname" => $user->firstname,
-                        // "lastname" => $user->lastname,
-                        // "email" => $user->email
                         "email" => $email,
-                        "password" => $password
+                        "password" => $password,
+                        "type" => "admin"
                     )
                  );
                  $jwt = JWT::encode($token, $key);

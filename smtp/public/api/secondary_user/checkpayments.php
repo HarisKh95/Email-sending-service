@@ -30,19 +30,30 @@ $j_v=$j->jwt_validate($jwt);
 if($j_v['result'])
 {
     $s=new Sec_user();
-    $s->set_sec_user($j_v['email']->email);
-    $requests=$s->check_payment($d);
-    if(isset($requests))
+    $s->set_sec_user($j_v['data']->email);
+
+    if($j_v['data']->type=="Second_user")
     {
-        if(!$requests==false)
+        $requests=$s->check_payment($d);
+        if($requests==false)
         {
-            echo json_encode($requests);
+            echo "\r\n";
+            $res->set_response(NULL,"No Payments list or do not have permission",406);
+            $res->respond_api();
         }
         else
         {
-            echo json_encode("Unable to check emails");
+            echo json_encode($requests);
+            echo "\r\n";
+            $res->set_response(NULL,"payments list recieved",200);
+            $res->respond_api();
         }
-
+    
+    }
+    else
+    {
+        $res->set_response(null,"Only Second users have access",401);
+        $res->respond_api();
     }
 }
 

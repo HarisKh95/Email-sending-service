@@ -65,8 +65,13 @@ class Merchant
     public function send_mail($from,$fname,$to,$tname,$cc,$cname,$bcc,$bname,$subject,$tpart,$hpart,$d)
     {
 
-
-      $mj = new \Mailjet\Client('de3b38d401b829c2e7ce2f2087fcdd6f','851f311bce8cc3110d52464dd9885e55',true,['version' => 'v3.1']);
+      $query = "SELECT * FROM merchant WHERE email='$this->email'";
+      $result = $d->query($query);
+      $result=$result->fetch_assoc();
+      $credit=$result['credit'];
+      if($credit>10.00)
+      {
+        $mj = new \Mailjet\Client('de3b38d401b829c2e7ce2f2087fcdd6f','851f311bce8cc3110d52464dd9885e55',true,['version' => 'v3.1']);
         $body = [
           'Messages' => [
             [
@@ -111,20 +116,36 @@ class Merchant
             $result=$result->fetch_assoc();
             $merchant_id=$result['id'];
             $credit=$result['credit']-0.0489;
-
+            $d->autocommit(true);
             $query = "UPDATE merchant SET credit='$credit' WHERE email='$this->email' ";
             $result = $d->query($query);
-
+            if (!$d -> commit()) {
+              echo "Commit transaction failed";
+              exit();
+            }
             $query = "INSERT INTO payments (Balance, merchant_id) VALUES ('$credit', '$merchant_id')";
             $result = $d->query($query);
-            // $hpart=strip_tags("$hpart");
+            if (!$d -> commit()) {
+              echo "Commit transaction failed";
+              exit();
+            }
+            $hpart=strip_tags("$hpart");
             $query = "INSERT INTO request (from_email,to_email,Cc,Bcc,subject,body,merchant_id) VALUES ('$from','$to','$cc','$bcc','$subject','$tpart.\n$hpart','$merchant_id')";
-            var_dump($query);
             $result = $d->query($query);
-            var_dump($result);
+            if (!$d -> commit()) {
+              echo "Commit transaction failed";
+              exit();
+            }
+            $d -> rollback();
             return true;
-        }
+            $d -> close();
 
+        }
+      }
+      else
+      {
+        echo "\r\nPlease recharge for it is neccesary to use our service.\r\n";
+      }
         return false; 
         $d->close();
     }
@@ -202,6 +223,7 @@ class Merchant
         $merchant_id=$result['id'];
        //create query
        $sql = "INSERT INTO secondary_user (name, email , password,check_listing,billing_info,send_mail,merchant_id) VALUES ('$name', '$email', '$password','$check_r','$check_bill','$send_mail','$merchant_id')";
+      var_dump($sql);
        $qury = $db_conn->query($sql);
        if ($qury == TRUE)
        {
@@ -209,7 +231,7 @@ class Merchant
        }
        else
        {
-           echo $db_conn->error;
+        return false;
        }
        $db_conn->close();
     }

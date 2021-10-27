@@ -30,11 +30,30 @@ $j_v=$j->jwt_validate($jwt);
 if($j_v['result'])
 {
     $s=new Sec_user();
-    $s->set_sec_user($j_v['email']->email);
-    $requests=$s->list_request($d);
-    if(isset($requests))
+    $s->set_sec_user($j_v['data']->email);
+
+    if($j_v['data']->type=="Second_user")
     {
-        echo json_encode($requests);
+        $requests=$s->list_request($d);
+        if($requests==false)
+        {
+            echo "\r\n";
+            $res->set_response(NULL,"No Request list",406);
+            $res->respond_api();
+        }
+        else
+        {
+            echo json_encode($requests);
+            echo "\r\n";
+            $res->set_response(NULL,"Requests list recieved",200);
+            $res->respond_api();
+        }
+    
+    }
+    else
+    {
+        $res->set_response(null,"Only Second users have access",401);
+        $res->respond_api();
     }
 }
 

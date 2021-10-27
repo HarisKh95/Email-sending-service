@@ -42,40 +42,39 @@ else{
      // call sign_in() method and pass required parameters 
      $result = $m->sign_in($email,$password,$db);
 
-          if($result->num_rows > 0){    
+          if($result->num_rows > 0)
+          {    
                $row = $result->fetch_assoc();
                $token = array(
                 "iat" => $issued_at,
                 "exp" => $expiration_time,
                 "iss" => $issuer,
                 "data" => array(
-                    // "id" => $user->id,
-                    // "firstname" => $user->firstname,
-                    // "lastname" => $user->lastname,
-                    // "email" => $user->email
                     "email" => $email,
-                    "password" => $password
+                    "password" => $password,
+                    "type" => "Merchant"
                 )
              );
           
-             // generate jwt
-             $jwt = JWT::encode($token, $key);
-             $msg= json_encode(
-                     array(
-                         "message" => "Merchant Successfully Login!",
-                         "jwt" => $jwt
-                     )
-                 );
-            $res->set_response(null,$msg,200);
-            $res->respond_api();
+               // Encode jwt
+               $jwt = JWT::encode($token, $key);
+               $msg= json_encode(
+                         array(
+                              "message" => "Merchant Successfully Login!",
+                              "jwt" => $jwt
+                         )
+                    );
+               $res->set_response(null,$msg,200);
+               $res->respond_api();
           }
-          else{
-          $user_arr=array(
-               "status" => 406,
-               "message" => "Invalid Merchantname or Password!",
-          );
-          $res->set_response(null,$user_arr['message'],$user_arr['status']);
-          $res->respond_api();
+          else
+          {
+               $user_arr=array(
+                    "status" => 406,
+                    "message" => "Invalid Merchant name or Password!",
+               );
+               $res->set_response(null,$user_arr['message'],$user_arr['status']);
+               $res->respond_api();
           }
      }
 

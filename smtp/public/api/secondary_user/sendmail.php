@@ -39,9 +39,33 @@ $j_v=$j->jwt_validate($jwt);
 
 if($j_v['result'])
 {
+
     $m=new Sec_user();
-    $m->set_sec_user($j_v['email']->email);
-    $m->send_mail($from,$fname,$to,$tname,$cc,$cname,$bcc,$bname,$subject,$tpart,$hpart,$d);
+    $m->set_sec_user($j_v['data']->email);
+    if($j_v['data']->type=="Second_user")
+    {
+        $requests=$m->send_mail($from,$fname,$to,$tname,$cc,$cname,$bcc,$bname,$subject,$tpart,$hpart,$d);
+        if($requests==false)
+        {
+            echo "\r\n";
+            $res->set_response(NULL,"Credit is low or Do not have permission",406);
+            $res->respond_api();
+        }
+        else
+        {
+            echo json_encode($requests);
+            echo "\r\n";
+            $res->set_response(NULL,"Mail Sent",200);
+            $res->respond_api();
+        }
+    
+    }
+    else
+    {
+        $res->set_response(null,"Only secondary user have access",401);
+        $res->respond_api();
+    }
+
 }
 
 
