@@ -1,0 +1,517 @@
+{
+	"info": {
+		"_postman_id": "209112ba-24f9-4e3c-be36-c2626b96d2e2",
+		"name": "SMTP_Haris",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "User sign in",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"Name\":\"Haris\",\r\n\"Email\":\"pf1@gmail.com\",\r\n\"Password\":\"hkkgkh\",\r\n\"Confirm_Password\":\"hkkgkh\"\r\n\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost/smtp_Haris/smtp/public/api/user/sign_in.php",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"smtp_Haris",
+								"smtp",
+								"public",
+								"api",
+								"user",
+								"sign_in.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User list_merchant.php",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"jwt\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MzUxNjAxMzcsImV4cCI6MTYzNTE2MzczNywiaXNzIjoiaHR0cDpcL1wvbG9jYWxob3N0XC9Db2RlT2ZhTmluamFcL1Jlc3RBcGlBdXRoTGV2ZWwxXC8iLCJkYXRhIjp7ImVtYWlsIjoicGYxQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiaGtrZ2toIn19.rnqk-R3bRO5_-3e_xHEqyF29TF5DmXkw_NiTtDd34uo\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/smtp_Haris/smtp/public/api/user/list_merchant.php",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"smtp_Haris",
+								"smtp",
+								"public",
+								"api",
+								"user",
+								"list_merchant.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User list payments",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"jwt\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MzUxNjAxMzcsImV4cCI6MTYzNTE2MzczNywiaXNzIjoiaHR0cDpcL1wvbG9jYWxob3N0XC9Db2RlT2ZhTmluamFcL1Jlc3RBcGlBdXRoTGV2ZWwxXC8iLCJkYXRhIjp7ImVtYWlsIjoicGYxQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiaGtrZ2toIn19.rnqk-R3bRO5_-3e_xHEqyF29TF5DmXkw_NiTtDd34uo\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost/smtp_Haris/smtp/public/api/user/list_payments.php",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"smtp_Haris",
+								"smtp",
+								"public",
+								"api",
+								"user",
+								"list_payments.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User list request",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/smtp_Haris/smtp/public/api/user/list_request.php",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"smtp_Haris",
+								"smtp",
+								"public",
+								"api",
+								"user",
+								"list_request.php"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Merchant",
+			"item": [
+				{
+					"name": "Merchant sign_up.php",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"Name\":\"Haris\",\r\n\"Email\":\"raajpoothk81@gmail.com\",\r\n\"Password\":\"hkkgkh\",\r\n\"Confirm_Password\":\"hkkgkh\"\r\n\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost/smtp_Haris/smtp/public/api/merchant/sign_up.php",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"smtp_Haris",
+								"smtp",
+								"public",
+								"api",
+								"merchant",
+								"sign_up.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Merchant sign in",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"Email\":\"hkhurshid95@gmail.com\",\r\n\"Password\":\"hkkgkh\",\r\n\"Confirm_Password\":\"hkkgkh\"\r\n\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost/smtp_Haris/smtp/public/api/merchant/sign_in.php",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"smtp_Haris",
+								"smtp",
+								"public",
+								"api",
+								"merchant",
+								"sign_in.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "send mail",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"From\":\"hkhurshid95@gmail.com\",\r\n\"FName\":\"Haris\",\r\n\"To\":\"raajpoothk81@gmail.com\",\r\n\"TName\":\"Hammad\",\r\n\"Cc\":\"raajpoothk81@gmail.com\",\r\n\"CName\":\"Hammad\",\r\n\"Bcc\":\"raajpoothk81@gmail.com\",\r\n\"BName\":\"Hammad\",\r\n\"Subject\":\"This is a test smtp mailjet\",\r\n\"Textpart\":\"My first own email service\",\r\n\"Htmlpart\":\"<h3>Dear passenger 1, welcome to <a href='https://www.mailjet.com/'>Mailjet</a>!</h3><br />May the delivery force be with you!\",\r\n\"jwt\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MzUwMjEwNzYsImV4cCI6MTYzNTAyNDY3NiwiaXNzIjoiaHR0cDpcL1wvbG9jYWxob3N0XC9Db2RlT2ZhTmluamFcL1Jlc3RBcGlBdXRoTGV2ZWwxXC8iLCJkYXRhIjp7ImVtYWlsIjoibWVyYzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiJoa2tna2gifX0.1VHOOGiTD4Zc0taGN_IcwK7UVdpTUUt-KEvYt4H4lTE\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/smtp_Haris/smtp/public/api/merchant/sendmail.php",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"smtp_Haris",
+								"smtp",
+								"public",
+								"api",
+								"merchant",
+								"sendmail.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list request",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"jwt\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MzUxNTUxNjEsImV4cCI6MTYzNTE1ODc2MSwiaXNzIjoiaHR0cDpcL1wvbG9jYWxob3N0XC9Db2RlT2ZhTmluamFcL1Jlc3RBcGlBdXRoTGV2ZWwxXC8iLCJkYXRhIjp7ImVtYWlsIjoibWVyYzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiJoa2tna2gifX0.B_rzWd5T6MwhZrwq5L5auhL-kkKZ1-I_FruMAgLvsKo\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/smtp_Haris/smtp/public/api/merchant/listrequest.php",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"smtp_Haris",
+								"smtp",
+								"public",
+								"api",
+								"merchant",
+								"listrequest.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check payments",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"jwt\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MzUzNjE2ODcsImV4cCI6MTYzNTM2NTI4NywiaXNzIjoiaHR0cDpcL1wvbG9jYWxob3N0XC9Db2RlT2ZhTmluamFcL1Jlc3RBcGlBdXRoTGV2ZWwxXC8iLCJkYXRhIjp7ImVtYWlsIjoiaWFta2FpdGhlYmVzdEBnbWFpbC5jb20iLCJwYXNzd29yZCI6Imhra2draCIsInR5cGUiOiJNZXJjaGFudCJ9fQ.bD7Ov2-dkMYURz_bO_PHQneU57BHqpOLb7FmOWMyfJU\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/smtp_Haris/smtp/public/api/merchant/checkpayments.php",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"smtp_Haris",
+								"smtp",
+								"public",
+								"api",
+								"merchant",
+								"checkpayments.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Merchant add user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"name\":\"Haris\",\r\n\"email\":\"merc1@gmail.com\",\r\n\"password\":\"hkkgkh\",\r\n\"check_request\":true,\r\n\"check_bill\":true,\r\n\"send_mail\":true,\r\n\"jwt\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MzUyMzA2NTIsImV4cCI6MTYzNTIzNDI1MiwiaXNzIjoiaHR0cDpcL1wvbG9jYWxob3N0XC9Db2RlT2ZhTmluamFcL1Jlc3RBcGlBdXRoTGV2ZWwxXC8iLCJkYXRhIjp7ImVtYWlsIjoibWVyYzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiJoa2tna2gifX0.Mc8EJR0prkFpvUf2Tdnz84milbqG-AZpDdlxltQRtXo\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/smtp_Haris/smtp/public/api/merchant/add_user.php",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"smtp_Haris",
+								"smtp",
+								"public",
+								"api",
+								"merchant",
+								"add_user.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Merchant recharge",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"number\":\"4242424242424242\",\r\n\"amount\":100,\r\n\"jwt\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MzUzMjg0NjMsImV4cCI6MTYzNTMzMjA2MywiaXNzIjoiaHR0cDpcL1wvbG9jYWxob3N0XC9Db2RlT2ZhTmluamFcL1Jlc3RBcGlBdXRoTGV2ZWwxXC8iLCJkYXRhIjp7ImVtYWlsIjoibWVyYzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiJoa2tna2gifX0.97ylpRhmu8Uj-Sn3FhT3wEQHjJVG_oANG-lU8Q6gh84\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost/smtp_Haris/smtp/public/api/merchant/recharge.php",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"smtp_Haris",
+								"smtp",
+								"public",
+								"api",
+								"merchant",
+								"recharge.php"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Second User",
+			"item": [
+				{
+					"name": "secondary_user sign_in",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"Name\":\"Haris\",\r\n\"Email\":\"add1@gmail.com\",\r\n\"Password\":\"hkkgkh\",\r\n\"Confirm_Password\":\"hkkgkh\"\r\n\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost/smtp_Haris/smtp/public/api/secondary_user/sign_in.php",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"smtp_Haris",
+								"smtp",
+								"public",
+								"api",
+								"secondary_user",
+								"sign_in.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "secondary user Send mail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/smtp_Haris/smtp/public/api/secondary_user/sign_in.php",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"smtp_Haris",
+								"smtp",
+								"public",
+								"api",
+								"secondary_user",
+								"sign_in.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Secondary list request",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/smtp_Haris/smtp/public/api/secondary_user/sendmail.php",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"smtp_Haris",
+								"smtp",
+								"public",
+								"api",
+								"secondary_user",
+								"sendmail.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Secondary check payments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": null
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "check cron",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		}
+	]
+}
